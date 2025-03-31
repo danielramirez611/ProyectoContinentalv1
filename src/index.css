@@ -1,0 +1,133 @@
+@import "tailwindcss";
+:root {
+  --color-primario: #6802c1;
+  --color-fondo: #f8f8f8;
+  --color-texto: #333333;
+  --color-blanco: #ffffff;
+}
+@theme {
+  --color-primario: #6802c1;
+  --color-fondo: #f8f8f8;
+  --color-texto: #333333;
+  --color-blanco: #ffffff;
+  --fuente-principal: "Neue Plak", sans-serif;
+}
+
+@font-face {
+  font-family: "Neue Plak";
+  src: url("/assets/fonts/NeuePlakBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Neue Plak";
+  src: url("/assets/fonts/NeuePlakNarrowRegular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Neue Plak";
+  src: url("/assets/fonts/NeuePlakLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Neue Plak";
+  src: url("/assets/fonts/NeuePlakBlack.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+body {
+  font-family: var(--fuente-principal);
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+}
+
+/* WorkflowSection.module.css */
+.swiperContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.swiperButtonNext,
+.swiperButtonPrev {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.swiperButtonNext:hover,
+.swiperButtonPrev:hover {
+  background-color: var(--color-primario);
+  color: white;
+}
+
+.swiperPagination {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1a1a1a; /* Gris oscuro para el track */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #333; /* Gris un poco más claro */
+  border-radius: 4px;
+  border: 1px solid #1a1a1a;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* Eliminar botones */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #1a1a1a;
+}
+
+/* Agregar en tu archivo CSS global */
+.bg-parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-parallax {
+    background-attachment: scroll;
+  }
+}
+.card-parallax-content {
+  transition: transform 0.6s ease;
+  transform: translateX(20px); /* Comienza más a la derecha */
+}
+
+.group:hover .card-parallax-content {
+  transform: translateX(0); /* Se desliza hacia la izquierda */
+}

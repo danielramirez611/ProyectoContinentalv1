@@ -1,0 +1,86 @@
+/* src/components/Login/Login.module.css */
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: white;
+  }
+  
+  .loginCard {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .title {
+    text-align: center;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .inputGroup {
+    position: relative;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  
+  .icon {
+    position: absolute;
+    left: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    font-size: 1.2rem;
+  }
+  
+  .button {
+    background: #667eea;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .button:hover {
+    background: #764ba2;
+  }
+  
+  .button:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+  }
+  
+  .error {
+    color: #e53e3e;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
