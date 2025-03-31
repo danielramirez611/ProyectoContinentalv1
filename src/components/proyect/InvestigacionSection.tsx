@@ -26,7 +26,7 @@ const InvestigacionSection = ({ projectId }: InvestigacionSectionProps) => {
   }, [projectId]);
 
   return (
-    <section className="px-6 py-12 max-w-5xl mx-auto">
+    <section className="px-6 py-12 max-w-5xl mx-auto" id="investigacion">
       <h2 className="text-2xl font-bold mb-6 text-blue-700">Investigaciones</h2>
 
       {loading ? (

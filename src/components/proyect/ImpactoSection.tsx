@@ -25,7 +25,7 @@ const ImpactoSection = ({ projectId }: ImpactoSectionProps) => {
   }, [projectId]);
 
   return (
-    <section className="py-8 px-4 md:px-8">
+    <section className="py-8 px-4 md:px-8" id="impacto">
       <h2 className="text-2xl font-bold mb-6">Impacto del Proyecto</h2>
       <div className="grid gap-6 md:grid-cols-2">
         {impactos.map((impact) => (

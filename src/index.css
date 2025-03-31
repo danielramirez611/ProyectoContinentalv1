@@ -131,3 +131,23 @@ body {
 .group:hover .card-parallax-content {
   transform: translateX(0); /* Se desliza hacia la izquierda */
 }
+/* Oculta la barra de scroll en navegadores basados en WebKit (Chrome, Safari, Edge moderno) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Oculta la barra de scroll en IE, Edge antiguo y Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+/* Ocultar scrollbar en Chrome, Safari, Edge moderno */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ocultar scrollbar en IE, Edge, Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE y Edge */
+  scrollbar-width: none;    /* Firefox */
+}

@@ -105,7 +105,7 @@ export const HeroGrid = ({
   };
 
   return (
-    <section className="relative h-screen flex items-center justify-start text-left text-white overflow-hidden px-4">
+    <section className="relative h-[50vh] flex items-center justify-start text-left text-white overflow-hidden px-4 ">
       {/* Capa de fondo con animación de escala */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center z-0"

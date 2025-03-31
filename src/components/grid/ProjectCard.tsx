@@ -32,19 +32,46 @@ export const ProjectCard = ({
   onClick,
 }: ProjectCardProps) => {
   return (
-    <div className="group relative w-full rounded-xl aspect-[4/3] overflow-hidden shadow-md bg-gray-100 cursor-pointer">
-      {/* Imagen de fondo (estática) */}
+    <div
+      // Contenedor principal “tipo Netflix”
+      // Se agranda (scale) al hacer hover
+      className="
+        group relative w-full rounded-xl aspect-[4/3] overflow-hidden
+        shadow-md bg-gray-100 cursor-pointer
+        transition-transform duration-300
+        hover:scale-105 hover:z-20
+      "
+      onClick={onClick}
+    >
+      {/* Imagen de fondo con “zoom” adicional al hover */}
       <img
         src={image}
         alt={title}
-        className="w-full h-full object-cover"
+        className="
+          w-full h-full object-cover
+          transition-transform duration-300
+          group-hover:scale-110
+        "
       />
 
-      {/* Capa oscura */}
-      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+      {/* Capa oscura, aparece al hover */}
+      <div
+        className="
+          absolute inset-0 bg-black/50 
+          opacity-0 group-hover:opacity-100
+          transition-opacity duration-300
+          z-10
+        "
+      />
 
-      {/* Contenido con parallax */}
-      <div className="absolute inset-0 z-20 p-4 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500 card-parallax-content">
+      {/* Contenido */}
+      <div
+        className="
+          absolute inset-0 z-20 p-4 flex flex-col justify-between 
+          opacity-0 group-hover:opacity-100 
+          transition-opacity duration-300
+        "
+      >
         {/* Título, categoría e ícono */}
         <div className="flex justify-between items-start">
           <div>
@@ -59,8 +86,11 @@ export const ProjectCard = ({
         {/* Botón */}
         <div className="flex justify-end">
           <button
-            onClick={onClick}
-            className="flex items-center gap-2 px-4 py-2 bg-white/90 text-gray-900 hover:bg-white transition rounded-full text-sm font-medium shadow"
+            className="
+              flex items-center gap-2 px-4 py-2 
+              bg-white/90 text-gray-900 hover:bg-white 
+              transition rounded-full text-sm font-medium shadow
+            "
           >
             Ver Proyecto <FaArrowRight className="text-base" />
           </button>

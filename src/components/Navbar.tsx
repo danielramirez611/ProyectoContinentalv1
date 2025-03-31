@@ -77,8 +77,8 @@ const Navbar = ({ project, flags }: NavbarProps) => {
   const navLinks = [
     { name: "Inicio", target: "hero" },
     flags.showAdvantages && { name: "Ventajas", target: "ventajas" },
-    flags.showFeatures && { name: "Beneficios", target: "beneficios" },
-    flags.showWorkflow && { name: "Proceso", target: "workflowSection" },
+    flags.showFeatures && { name: "Beneficios", target: "caracteristicas" },
+    flags.showWorkflow && { name: "Proceso", target: "proceso" },
     flags.showTeam && { name: "Equipo", target: "equipo" },
     flags.showContact && { name: "Contacto", target: "contacto" },
     flags.showImpacto && { name: "Impacto", target: "impacto" },

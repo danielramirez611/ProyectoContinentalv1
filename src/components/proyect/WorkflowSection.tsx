@@ -228,11 +228,11 @@ const WorkflowSection = ({ projectId }: WorkflowSectionProps) => {
   return (
     <section
       ref={sectionRef}
-      className={`py-20 transition-opacity duration-500 ${
+      className={`py-20 transition-opacity duration-500  ${
         isVisible ? "opacity-100" : "opacity-0"
-      }`}
+      }`}  id="proceso"
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4" >
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             {workflowTitle}

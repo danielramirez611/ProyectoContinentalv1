@@ -118,7 +118,7 @@ const InvestigacionForm = ({ projectId }: InvestigacionFormProps) => {
         </div>
 
         <div>
-          <label className="block font-medium">Derechos de autor</label>
+          <label className="block font-medium">Tipo de licencia</label>
           <input
             type="text"
             className="w-full border px-3 py-2"
