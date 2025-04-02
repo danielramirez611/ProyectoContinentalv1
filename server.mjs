@@ -31,10 +31,18 @@ const io = new Server(server, {
 
 app.use(express.json({ limit: '1000mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1000mb' }));
+app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store');
+    next();
+});
 
 
 app.use(cors());
-app.use('/media', express.static('media')); // Servir archivos multimedia
+app.use('/media', express.static('media', {
+    setHeaders: (res, path) => {
+        res.setHeader("Cache-Control", "no-store");
+    }
+}));
 
 // 🔹 **Conexión a la Base de Datos**
 let db;
