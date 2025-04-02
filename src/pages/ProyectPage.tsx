@@ -24,6 +24,7 @@ const ProjectPage = () => {
   const [showForm, setShowForm] = useState(false);
   const { id } = useParams();
   const location = useLocation();
+  const [workflowVersion, setWorkflowVersion] = useState(0);
   const [showFlags, setShowFlags] = useState({
     showAdvantages: false,
     showFeatures: false,
@@ -33,7 +34,10 @@ const ProjectPage = () => {
     showImpacto: false,         // 🔥 NUEVO
     showInvestigacion: false    // 🔥 NUEVO
   });
-
+  const handleWorkflowUpdated = () => {
+    setWorkflowVersion((prev) => prev + 1); // 🔄 fuerza actualización en WorkflowSection
+  };
+  
   // Cargar configuración del proyecto
   useEffect(() => {
     const loadConfig = async () => {
@@ -193,13 +197,15 @@ const ProjectPage = () => {
               transition={{ duration: 0.3 }}
             >
               <WorkflowSection
-                key={project.workflow ? project.workflow.length : 0}
-                projectId={project.id}
+  key={workflowVersion} // 👈 ESTO fuerza re-render TOTAL al cambiar versión
+  projectId={project.id}
                 workflow={project.workflow}
                 workflowTitle={project.workflowTitle}
                 workflowSubtitle={project.workflowSubtitle}
                 onEdit={() => setShowForm(true)}
                 onDelete={(index) => console.log("Eliminar paso:", index)}
+                version={workflowVersion} // 👈 clave para recargar cambios
+
               />
             </motion.div>
           )}
@@ -297,6 +303,8 @@ const ProjectPage = () => {
               setProject={setProject}
               onFinish={() => setShowForm(false)}
               onUpdateFlags={handleUpdateFlags}
+              onWorkflowUpdated={() => setWorkflowVersion((v) => v + 1)} // ✅ nuevo
+
             />
           </div>
         </div>

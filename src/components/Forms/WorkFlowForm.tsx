@@ -20,9 +20,11 @@ interface WorkflowFormProps {
   project: ProjectData;
   setProject: (data: ProjectData) => void;
   token: string;
+  onWorkflowUpdated: () => void; // ✅ NUEVO
+
 }
 
-const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
+const WorkflowForm = ({ project, setProject, token, onWorkflowUpdated }: WorkflowFormProps) => {
   const [newStep, setNewStep] = useState<Partial<WorkflowStep>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [editingStepId, setEditingStepId] = useState<number | null>(null);
@@ -64,7 +66,19 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
       fetchSteps();
     }
   }, [project.id]);
-
+  useEffect(() => {
+    if (editingStepId !== null) {
+      const step = project.workflow?.find((s) => s.id === editingStepId);
+      if (step) {
+        setEditingStepData({
+          title: step.title,
+          description: step.description,
+          image: step.image,
+        });
+      }
+    }
+  }, [editingStepId]);
+  
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -87,6 +101,8 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
         token
       );
       await fetchSteps();
+      onWorkflowUpdated(); // ✅
+
       alert("Título del workflow guardado en la base de datos");
     } catch (error) {
       console.error("Error al guardar título/subtítulo:", error);
@@ -98,39 +114,54 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
       alert("Completa todos los campos del paso incluyendo imagen");
       return;
     }
-
+  
     try {
       const imageBlob = await fetch(newStep.image).then((r) => r.blob());
       const file = new File([imageBlob], `step-${Date.now()}.jpg`, {
         type: imageBlob.type,
       });
-
+  
       const step_number = (project.workflow?.length || 0) + 1;
-      const savedStep = await addWorkflowStep(
+  
+      const rawStep = await addWorkflowStep(
         project.id,
         { ...newStep, step_number },
         file,
         token
       );
+  
+      const formattedStep = {
+        id: rawStep.id,
+        step: rawStep.step_number,
+        title: rawStep.title,
+        description: rawStep.description,
+        image: rawStep.image_url
+          ? `http://localhost:5000${rawStep.image_url}`
+          : null,
+      };
+  
+      await fetchSteps(); // 🔁 fuerza relectura con imágenes bien formateadas
 
-      // Actualizar el estado local directamente
-      setProject((prev) => ({
-        ...prev,
-        workflow: [...(prev.workflow || []), savedStep],
-        showWorkflow: true,
-      }));
+setNewStep({});
+if (fileInputRef.current) {
+  fileInputRef.current.value = "";
+}
 
-      setNewStep({});
+
+onWorkflowUpdated(); // 🔄 fuerza update en WorkflowSection si lo usas
+
     } catch (error) {
       console.error("Error al agregar paso:", error);
     }
   };
+  
 
   const handleDeleteStep = async (stepId: number) => {
     if (!window.confirm("¿Estás seguro de eliminar este paso?")) return;
     try {
       await deleteWorkflowStep(project.id, stepId, token);
-  
+      onWorkflowUpdated(); // ✅
+
       // Actualizar el estado local directamente
       setProject((prev) => ({
         ...prev,
@@ -157,39 +188,51 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
   };
   const handleSaveEditedStep = async () => {
     if (!editingStepId) return;
-
+  
     try {
       const stepToEdit = project.workflow?.find(
         (step) => step.id === editingStepId
       );
+  
       const updatedStepData = {
         title: editingStepData.title || stepToEdit?.title,
         description: editingStepData.description || stepToEdit?.description,
         step_number: stepToEdit?.step,
       };
-
-      const updatedStep = await updateWorkflowStep(
+  
+      const rawUpdatedStep = await updateWorkflowStep(
         project.id,
         editingStepId,
         updatedStepData,
-        editingStepData.imageFile, // Enviar archivo si se cambió
+        editingStepData.imageFile,
         token
       );
+  
+      // Opcional: construir paso actualizado si quieres mostrarlo localmente sin recargar
+      const updatedStep = {
+        id: rawUpdatedStep.id,
+        step: stepToEdit?.step,
+        title: updatedStepData.title,
+        description: updatedStepData.description,
+        image: rawUpdatedStep.image_url
+          ? `http://localhost:5000${rawUpdatedStep.image_url}`
+          : editingStepData.image || stepToEdit?.image,
+      };
+  
+      // ✅ Recargar pasos desde el backend para asegurar sincronización
+      await fetchSteps();
+      onWorkflowUpdated(); // ✅
 
-      // Actualizar el estado local directamente
-      setProject((prev) => ({
-        ...prev,
-        workflow: (prev.workflow || []).map((step) =>
-          step.id === editingStepId ? updatedStep : step
-        ),
-      }));
-
+      // 🔄 Resetear estado de edición
       setEditingStepId(null);
       setEditingStepData({});
+  
     } catch (error) {
       console.error("Error al actualizar paso:", error);
     }
   };
+  
+  
 
   return (
     <div className="space-y-8">
@@ -258,7 +301,7 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
       <AnimatePresence>
         {(project.workflow || []).map((step, index) => (
           <motion.div
-            key={step.id}
+            key={`${step.id}-${index}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -392,13 +435,17 @@ const WorkflowForm = ({ project, setProject, token }: WorkflowFormProps) => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
+                    setEditingStepData({}); // 🔄 Reinicia estado anterior
                     setEditingStepId(step.id);
-                    setEditingStepData({
-                      title: step.title,
-                      description: step.description,
-                      image: step.image,
-                    });
+                    setTimeout(() => {
+                      setEditingStepData({
+                        title: step.title,
+                        description: step.description,
+                        image: step.image,
+                      });
+                    }, 0); // 🔄 Asegura render limpio antes de aplicar nuevos datos
                   }}
+                  
                   className="flex items-center gap-2 bg-indigo-500 text-white py-3 px-6 rounded-lg text-lg"
                 >
                   Editar Paso

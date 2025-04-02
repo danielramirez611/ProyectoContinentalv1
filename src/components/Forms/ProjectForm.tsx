@@ -35,6 +35,8 @@ interface ProjectFormProps {
     showImpacto: boolean;          // 🔥 NUEVO
     showInvestigacion: boolean;   // 🔥 NUEVO
   }) => void;
+  onWorkflowUpdated: () => void; // ✅ nuevo
+
 }
 
 const ProjectForm: React.FC<ProjectFormProps> = ({
@@ -42,9 +44,12 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
   setProject,
   onFinish,
   onUpdateFlags,
+  onWorkflowUpdated,// ✅ agrégalo aquí
+
 }) => {
   const { user } = useAuth();
   const token = user?.token || "";
+  const [workflowVersion, setWorkflowVersion] = useState(0);
 
   const [currentSection, setCurrentSection] = useState<number>(-1);
   const [selectedSections, setSelectedSections] = useState({
@@ -56,7 +61,10 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     impacto: false,         // 🔥 NUEVO
   investigacion: false    // 🔥 NUEVO
   });
-
+  const handleWorkflowUpdated = () => {
+    setWorkflowVersion((prev) => prev + 1); // 🔄 fuerza actualización en WorkflowSection
+  };
+  
   // Cargar configuración inicial
   useEffect(() => {
     const loadConfig = async () => {
@@ -131,7 +139,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
       name: "Ventajas",
       key: "advantages",
       component: <AdvantagesForm projectId={project.id || 0} token={token} />,
-      validation: () => true,
+      validation: () => true, 
     },
     {
       name: "Características",
@@ -142,9 +150,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     {
       name: "Flujo de trabajo",
       key: "workflow",
-      component: <WorkflowForm project={project} setProject={setProject} />,
+      component: (
+        <WorkflowForm
+          project={project} 
+          setProject={setProject}
+          token={token}
+          onWorkflowUpdated={() => setWorkflowVersion((v) => v + 1)} // ✅ aquí actualizas
+          />
+      ),
       validation: () => true,
     },
+    
     {
       name: "Equipo",
       key: "team",

@@ -7,9 +7,11 @@ import styles from "../../WorkflowSection.module.css";
 
 interface WorkflowSectionProps {
   projectId: number;
+  version?: number; // ✅ nuevo prop opcional
+
 }
 
-const WorkflowSection = ({ projectId }: WorkflowSectionProps) => {
+const WorkflowSection = ({ projectId,version = 0  }: WorkflowSectionProps) => {
   const [workflow, setWorkflow] = useState([]);
   const [workflowTitle, setWorkflowTitle] = useState("");
   const [workflowSubtitle, setWorkflowSubtitle] = useState("");
@@ -30,6 +32,7 @@ const WorkflowSection = ({ projectId }: WorkflowSectionProps) => {
       }));
 
       setWorkflow(formattedSteps);
+      console.log("Workflow actualizado:", formattedSteps);
       setWorkflowTitle(workflowResponse?.title || "");
       setWorkflowSubtitle(workflowResponse?.subtitle || "");
     } catch (error) {
@@ -40,7 +43,7 @@ const WorkflowSection = ({ projectId }: WorkflowSectionProps) => {
   // Cargar los datos al montar el componente
   useEffect(() => {
     fetchWorkflowData();
-  }, [projectId]);
+  }, [projectId, version]);
 
   // Observador para animaciones
   useEffect(() => {
